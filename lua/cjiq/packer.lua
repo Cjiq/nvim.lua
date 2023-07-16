@@ -24,9 +24,16 @@ return require('packer').startup(function(use)
   }
 
   use('tanvirtin/monokai.nvim')
+
+  -- Bufferline
+  use {
+    'akinsho/bufferline.nvim',
+    dependencies = 'nvim-tree/nvim-web-devicons'
+  }
+
   use {
     'nvim-lualine/lualine.nvim',
-    requires = { 'nvim-tree/nvim-web-devicons', opt = true }
+    requires = { 'nvim-tree/nvim-web-devicons', opt = true },
   }
 
   use('nvim-treesitter/nvim-treesitter', {run = ':TSUpdate'})
