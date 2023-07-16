@@ -29,13 +29,11 @@ cmp.setup({
     mapping = {
         -- `Enter` key to confirm completion
         ['<CR>'] = cmp.mapping.confirm({select = false}),
-
-        -- Ctrl+Space to trigger completion menu
-        ['<C-Space>'] = cmp.mapping.complete(),
+        ['<C-Space>'] = cmp.mapping.confirm({select = false}),
 
         -- Navigate between snippet placeholder
-        ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
-        ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
+        ['<C-j>'] = cmp.mapping.select_prev_item(cmp_select),
+        ['<C-k>'] = cmp.mapping.select_next_item(cmp_select),
 
         -- Navigate between snippet placeholder
         ['<C-f>'] = cmp_action.luasnip_jump_forward(),
