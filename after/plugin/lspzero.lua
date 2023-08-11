@@ -30,10 +30,11 @@ cmp.setup({
         -- `Enter` key to confirm completion
         ['<CR>'] = cmp.mapping.confirm({select = false}),
         ['<C-Space>'] = cmp.mapping.confirm({select = false}),
+        ['<Tab>'] = cmp.mapping.confirm({select = false}),
 
         -- Navigate between snippet placeholder
-        ['<C-j>'] = cmp.mapping.select_prev_item(cmp_select),
-        ['<C-k>'] = cmp.mapping.select_next_item(cmp_select),
+        ['<C-k>'] = cmp.mapping.select_prev_item(cmp_select),
+        ['<C-j>'] = cmp.mapping.select_next_item(cmp_select),
 
         -- Navigate between snippet placeholder
         ['<C-f>'] = cmp_action.luasnip_jump_forward(),
