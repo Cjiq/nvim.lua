@@ -20,7 +20,12 @@ wk.register({
   r = {
     name = "Reload",
     cp = { "<cmd>so ~/.config/nvim/after/plugin/copilot.lua | Copilot enable<cr>", "Restart copilot" },
+  },
+  f = {
+    name = "Find",
+    f = { "<cmd>silent !tmux neww ~/.dotfiles/scripts/tmux-sessionizer<cr>", "Find project and start new tmux session" },
   }
+
 }, { prefix = "<leader>", mode = {"n"} })
 
 
