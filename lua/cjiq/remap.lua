@@ -1,4 +1,5 @@
 vim.g.mapleader = " "
+
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 vim.keymap.set("n", "<leader>pss", vim.cmd.PackerSync)
 vim.keymap.set("n", "<leader>.", vim.cmd.vsp)
@@ -13,3 +14,13 @@ vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 vim.keymap.set("x", "<leader>p", "\"_dP")
 
 vim.keymap.set("n", "J", "mzJ`z")
+
+local wk = require("which-key")
+wk.register({
+  r = {
+    name = "Reload",
+    cp = { "<cmd>so ~/.config/nvim/after/plugin/copilot.lua | Copilot enable<cr>", "Restart copilot" },
+  }
+}, { prefix = "<leader>", mode = {"n"} })
+
+

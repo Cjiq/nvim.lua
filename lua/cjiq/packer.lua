@@ -70,7 +70,25 @@ return require('packer').startup(function(use)
 use 'ray-x/go.nvim'
 use 'ray-x/guihua.lua' -- recommended if need floating window support
 use 'neovim/nvim-lspconfig'
+
+
 use 'alexghergh/nvim-tmux-navigation'
+
+-- Lua
+use {
+  "folke/which-key.nvim",
+  config = function()
+    vim.o.timeout = true
+    vim.o.timeoutlen = 600
+    require("which-key").setup {
+      -- your configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+    }
+  end
+}
+
+use("github/copilot.vim")
 
 -- Automatically set up your configuration after cloning packer.nvim
 -- Put this at the end after all plugins
