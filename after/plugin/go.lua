@@ -13,7 +13,7 @@ require('go').setup()
 local wk = require("which-key")
 wk.register({
   g = {
-    name = "Golang",
+    name = "Golang / Git",
     at = { "<cmd>GoAddTag<cr>", "Add tags to struct" },
   }
 }, { prefix = "<leader>", buffer = bufnr })

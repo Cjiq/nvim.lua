@@ -24,8 +24,17 @@ wk.register({
   f = {
     name = "Find",
     f = { "<cmd>silent !tmux neww ~/.dotfiles/scripts/tmux-sessionizer<cr>", "Find project and start new tmux session" },
+  },
+  g = {
+    t = {
+      name = "Telescope",
+      s = { "<cmd>Telescope git_status<cr>", "Git status" },
+    },
+    s = { "<cmd>Git<cr>", "Git status" },
+    c = { "<cmd>Git commit -v -q<cr>", "Git commit" },
+    d = { "<cmd>Git diff<cr>", "Git diff" },
+    p = { "<cmd>Git push<cr>", "Git push" },
   }
-
 }, { prefix = "<leader>", mode = {"n"} })
 
 
