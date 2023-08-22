@@ -40,6 +40,10 @@ return require('packer').startup(function(use)
 
   use('theprimeagen/harpoon')
 
+  use('powerline/fonts')
+  use( 'chrisbra/Colorizer')
+  use( 'chrisbra/csv.vim', { commit = '5a62e08b7191848f2d67fcf7e25c3f672285d64d' })
+
   use('mbbill/undotree')
 
   use('tpope/vim-fugitive')
