@@ -23,3 +23,7 @@ vim.o.mouse = 'a'
 
 -- Enable break indent
 vim.o.breakindent = true
+
+-- Default split behavior
+vim.o.splitright = true
+vim.o.splitbelow = true
