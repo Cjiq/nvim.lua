@@ -14,8 +14,9 @@ local load_bufferline= function ()
       diagnostics_update_in_insert = true,
       -- The diagnostics indicator can be set to nil to keep the buffer name highlight but delete the highlighting
       diagnostics_indicator = function(count, level, diagnostics_dict, context)
-          return "("..count..")" .. " test"
+          return "err("..count..")" .. " test"
       end,
+      max_name_length = 30,
       name_formatter = function(buf)
         local marks = harpoon.get_mark_config().marks
         for idx = 1, #marks do
