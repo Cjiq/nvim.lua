@@ -63,7 +63,9 @@ lsp.on_attach(function(client, bufnr)
       ca = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code action at cursor" },
       rr = { "<cmd>lua vim.lsp.buf.references()<cr>", "All references at cursor" },
       rn = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename symbol at cursor" },
-    }
+      gd = { "<cmd>lua vim.lsp.buf.definition()<cr>", "Goto definition" },
+    },
+
   }, { prefix = "<leader>", buffer = bufnr })
 
 end)
