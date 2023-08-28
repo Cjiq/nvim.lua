@@ -43,7 +43,6 @@ cmp.setup({
 lsp.on_attach(function(client, bufnr)
   local opts = {buffer = bufnr, remap = false}
 
-  vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
   vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
   vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts)
   vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end, opts)
@@ -65,7 +64,11 @@ lsp.on_attach(function(client, bufnr)
       rn = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename symbol at cursor" },
       gd = { "<cmd>lua vim.lsp.buf.definition()<cr>", "Goto definition" },
     },
-
+    d = {
+      name = "diagnostic",
+      n = { "<cmd>lua vim.diagnostic.goto_next()<cr>", "Next diagnostic" },
+      p = { "<cmd>lua vim.diagnostic.goto_prev()<cr>", "Previous diagnostic" },
+    }
   }, { prefix = "<leader>", buffer = bufnr })
 
 end)
