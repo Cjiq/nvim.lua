@@ -59,7 +59,7 @@ lsp.on_attach(function(client, bufnr)
     v = {
       d = { "<cmd>lua vim.diagnostic.open_float()<cr>", "Diagnostic in new window" },
       ws = { "<cmd>lua vim.lsp.buf.workspace_symbol()<cr>", "List all symbols in current ws" },
-      ca = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code action at cursor" },
+      a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code action at cursor" },
       rr = { "<cmd>lua vim.lsp.buf.references()<cr>", "All references at cursor" },
       rn = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename symbol at cursor" },
       gd = { "<cmd>lua vim.lsp.buf.definition()<cr>", "Goto definition" },

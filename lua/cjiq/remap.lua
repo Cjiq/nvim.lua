@@ -22,6 +22,7 @@ wk.register({
   r = {
     name = "Reload",
     cp = { "<cmd>so ~/.config/nvim/after/plugin/copilot.lua | Copilot enable<cr>", "Restart copilot" },
+    r = { "<cmd>so ~/.config/nvim/lua/cjiq/init.lua<cr>", "Reload nvim config" },
   },
   f = {
     name = "Find",
@@ -36,7 +37,8 @@ wk.register({
     c = { "<cmd>Git commit -v -q<cr>", "Git commit" },
     d = { "<cmd>Git diff<cr>", "Git diff" },
     p = { "<cmd>Git push<cr>", "Git push" },
-  }
+  },
+  w = {"<cmd>FormatWrite<cr>", "Format current buffer"},
 }, { prefix = "<leader>", mode = {"n"} })
 
 
