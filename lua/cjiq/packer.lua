@@ -23,6 +23,11 @@ return require('packer').startup(function(use)
     requires = { {'nvim-lua/plenary.nvim'} }
   }
 
+  -- Packer
+  use "sindrets/diffview.nvim"
+
+  use { 'mhartington/formatter.nvim' }
+
   use('tanvirtin/monokai.nvim')
 
   -- Bufferline
