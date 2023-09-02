@@ -30,6 +30,8 @@ return require('packer').startup(function(use)
 
   use('tanvirtin/monokai.nvim')
 
+  use('mhartington/formatter.nvim')
+
   -- Bufferline
   use {
     'akinsho/bufferline.nvim',
