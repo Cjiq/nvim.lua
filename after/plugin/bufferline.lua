@@ -28,6 +28,19 @@ local load_bufferline= function ()
         end
         return buf.name
       end,
+      left_mouse_command = function(buf)
+        -- buffer %d
+        local winid = vim.api.nvim_get_current_win()
+        local bufwin_id = vim.fn.bufwinid(buf)
+        local curr_buf = vim.api.nvim_get_current_buf()
+        print("window " .. winid .. " buf " .. buf .. " bufwin_id " .. bufwin_id .. " curr buf " .. curr_buf)
+        if winid ~= bufwin_id then
+          vim.api.nvim_win_set_buf(winid, buf)
+        elseif bufwin_id ~= -1 then
+          return
+        end
+        vim.cmd("buffer " .. buf)
+      end
     },
   })
 end

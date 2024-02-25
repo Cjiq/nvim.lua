@@ -1,0 +1,1 @@
+require('tailwind-fold').setup{}
