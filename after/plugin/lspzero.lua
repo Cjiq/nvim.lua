@@ -5,7 +5,16 @@ lsp.on_attach(function(client, bufnr)
 end)
 
 -- (Optional) Configure lua language server for neovim
-require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
+local lspconfig = require('lspconfig')
+lspconfig.lua_ls.setup{
+  settings = {
+    Lua = {
+      diagnostics = {
+        globals = { 'vim' }
+      }
+    }
+  }
+}
 
 lsp.ensure_installed({
   'tsserver',
@@ -22,13 +31,14 @@ cmp.setup({
   sources = {
     {name = 'path'},
     {name = 'nvim_lsp'},
-    {name = 'buffer', keyword_length = 3},
-    {name = 'luasnip', keyword_length = 2},
+    {name = 'buffer'},
+    {name = 'luasnip'},
   },
   mapping = {
     -- `Enter` key to confirm completion
     ['<CR>'] = cmp.mapping.confirm({select = false}),
     ['<C-Space>'] = cmp.mapping.confirm({select = false}),
+    ['<Tab>'] = cmp.mapping.confirm({select = false}),
 
     -- Navigate between snippet placeholder
     ['<C-k>'] = cmp.mapping.select_prev_item(cmp_select),
@@ -43,7 +53,6 @@ cmp.setup({
 lsp.on_attach(function(client, bufnr)
   local opts = {buffer = bufnr, remap = false}
 
-  vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
   vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
   vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts)
   vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end, opts)
@@ -58,11 +67,18 @@ lsp.on_attach(function(client, bufnr)
   local wk = require("which-key")
   wk.register({
     v = {
+      name = "lsp",
       d = { "<cmd>lua vim.diagnostic.open_float()<cr>", "Diagnostic in new window" },
       ws = { "<cmd>lua vim.lsp.buf.workspace_symbol()<cr>", "List all symbols in current ws" },
-      ca = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code action at cursor" },
+      a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code action at cursor" },
       rr = { "<cmd>lua vim.lsp.buf.references()<cr>", "All references at cursor" },
       rn = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename symbol at cursor" },
+      gd = { "<cmd>lua vim.lsp.buf.definition()<cr>", "Goto definition" },
+    },
+    d = {
+      name = "diagnostic",
+      n = { "<cmd>lua vim.diagnostic.goto_next()<cr>", "Next diagnostic" },
+      p = { "<cmd>lua vim.diagnostic.goto_prev()<cr>", "Previous diagnostic" },
     }
   }, { prefix = "<leader>", buffer = bufnr })
 

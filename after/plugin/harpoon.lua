@@ -4,7 +4,10 @@ local ui = require("harpoon.ui")
 vim.keymap.set("n", "<leader>b", mark.add_file)
 vim.keymap.set("n", "<C-e>", ui.toggle_quick_menu)
 
-vim.keymap.set("n", "<C-h>", function() ui.nav_file(1) end)
-vim.keymap.set("n", "<C-t>", function() ui.nav_file(2) end)
-vim.keymap.set("n", "<C-n>", function() ui.nav_file(3) end)
-vim.keymap.set("n", "<C-s>", function() ui.nav_file(4) end)
+local wk = require("which-key")
+wk.register({
+  j = { function() ui.nav_file(1) end, "Harpoon file 1" },
+  k = { function() ui.nav_file(2) end, "Harpoon file 2" },
+  l = { function() ui.nav_file(3) end, "Harpoon file 3" },
+  ö = { function() ui.nav_file(4) end, "Harpoon file 4" },
+}, { prefix = "<leader>", mode = {"n"} })

@@ -1,7 +1,7 @@
 require("cjiq")
 
 -- Set highlight on search
-vim.o.hlsearch = true
+vim.o.hlsearch = false
 
 -- Make line numbers default
 vim.wo.number = true
@@ -27,3 +27,53 @@ vim.o.breakindent = true
 -- Default split behavior
 vim.o.splitright = true
 vim.o.splitbelow = true
+
+vim.filetype.add({
+  extension = {
+    templ = "templ",
+  },
+})
+
+-- Tailwind fold
+
+
+local custom_format = function()
+  if vim.bo.filetype == "templ" then
+    local bufnr = vim.api.nvim_get_current_buf()
+    local filename = vim.api.nvim_buf_get_name(bufnr)
+    local cmd = "templ fmt " .. vim.fn.shellescape(filename)
+
+    vim.fn.jobstart(cmd, {
+      on_exit = function()
+        -- Reload the buffer only if it's still the current buffer
+        if vim.api.nvim_get_current_buf() == bufnr then
+          vim.cmd('e!')
+        end
+      end,
+    })
+  else
+    vim.lsp.buf.format()
+  end
+end
+local format_sync_grp = vim.api.nvim_create_augroup("FormatterFormat", {})
+vim.api.nvim_create_autocmd({ "BufWritePre" }, { pattern = { "*.templ" }, callback = custom_format, group = format_sync_grp })
+local custom_bufferline = function(buf)
+  for _, winid in pairs(vim.api.nvim_tabpage_list_wins(0)) do
+    if vim.api.nvim_win_get_config(winid).zindex then
+      return
+    end
+  end
+  local custom_load_tabs = function()
+    vim.wo.winbar=_G.nvim_bufferline()
+    vim.cmd("set showtabline=0")
+  end
+  vim.defer_fn(custom_load_tabs, 120)
+  -- vim.cmd(":LspRestart")
+end
+vim.api.nvim_create_autocmd({ "BufEnter" }, { callback = custom_bufferline })
+
+local buf_enter_grp = vim.api.nvim_create_augroup("BufEnterGroup", {})
+vim.api.nvim_create_autocmd("BufEnter", {
+  callback = custom_bufferline,
+  group = buf_enter_grp
+})

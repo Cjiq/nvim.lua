@@ -23,7 +23,25 @@ return require('packer').startup(function(use)
     requires = { {'nvim-lua/plenary.nvim'} }
   }
 
+  use {
+    'cjiq/tailwind-fold.nvim',
+    dependencies = 'nvim-treesitter/nvim-treesitter',
+    -- ft = { 'html', 'svelte', 'astro', 'vue', 'typescriptreact', 'php', 'blade', 'templ'},
+  }
+
+  -- Vim debug tools
+  use 'mfussenegger/nvim-dap'
+  use 'theHamsta/nvim-dap-virtual-text'
+  use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"} }
+
+  -- Packer
+  use "sindrets/diffview.nvim"
+
+  use { 'mhartington/formatter.nvim' }
+
   use('tanvirtin/monokai.nvim')
+
+  use('mhartington/formatter.nvim')
 
   -- Bufferline
   use {
