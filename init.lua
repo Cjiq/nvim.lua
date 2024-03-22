@@ -19,10 +19,13 @@ vim.opt.incsearch = true
 vim.opt.colorcolumn = "80"
 
 -- Enable mouse mode
-vim.o.mouse = 'a'
+vim.o.mouse = "a"
 
 -- Enable break indent
 vim.o.breakindent = true
+
+-- Handle listchars
+vim.o.listchars = "tab:»·,trail:·,extends:→,precedes:←,nbsp:␣"
 
 -- Default split behavior
 vim.o.splitright = true
@@ -36,7 +39,6 @@ vim.filetype.add({
 
 -- Tailwind fold
 
-
 local custom_format = function()
   if vim.bo.filetype == "templ" then
     local bufnr = vim.api.nvim_get_current_buf()
@@ -47,7 +49,7 @@ local custom_format = function()
       on_exit = function()
         -- Reload the buffer only if it's still the current buffer
         if vim.api.nvim_get_current_buf() == bufnr then
-          vim.cmd('e!')
+          vim.cmd("e!")
         end
       end,
     })
@@ -56,7 +58,10 @@ local custom_format = function()
   end
 end
 local format_sync_grp = vim.api.nvim_create_augroup("FormatterFormat", {})
-vim.api.nvim_create_autocmd({ "BufWritePre" }, { pattern = { "*.templ" }, callback = custom_format, group = format_sync_grp })
+vim.api.nvim_create_autocmd(
+  { "BufWritePre" },
+  { pattern = { "*.templ" }, callback = custom_format, group = format_sync_grp }
+)
 local custom_bufferline = function(buf)
   for _, winid in pairs(vim.api.nvim_tabpage_list_wins(0)) do
     if vim.api.nvim_win_get_config(winid).zindex then
@@ -64,7 +69,7 @@ local custom_bufferline = function(buf)
     end
   end
   local custom_load_tabs = function()
-    vim.wo.winbar=_G.nvim_bufferline()
+    vim.wo.winbar = _G.nvim_bufferline()
     vim.cmd("set showtabline=0")
   end
   vim.defer_fn(custom_load_tabs, 120)
@@ -75,5 +80,5 @@ vim.api.nvim_create_autocmd({ "BufEnter" }, { callback = custom_bufferline })
 local buf_enter_grp = vim.api.nvim_create_augroup("BufEnterGroup", {})
 vim.api.nvim_create_autocmd("BufEnter", {
   callback = custom_bufferline,
-  group = buf_enter_grp
+  group = buf_enter_grp,
 })
