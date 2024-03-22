@@ -15,6 +15,15 @@ lspconfig.lua_ls.setup{
     }
   }
 }
+lspconfig.gopls.setup{
+  capabilities = {
+    workspace = {
+      didChangeWatchedFiles = {
+        dynamicRegistration = true,
+      },
+    },
+  },
+}
 
 lsp.ensure_installed({
   'tsserver',

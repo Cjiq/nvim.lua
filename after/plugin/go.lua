@@ -7,8 +7,7 @@ vim.api.nvim_create_autocmd("BufWritePre", {
   group = format_sync_grp,
 })
 
-local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
-
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
 require('go').setup({
   lsp_cfg = capabilities,
 })
