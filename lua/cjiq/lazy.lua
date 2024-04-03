@@ -762,9 +762,46 @@ require("lazy").setup({
       })
       wk.register({
         t = {
-          d = { "<cmd>tabclose<cr>", "Tab close" },
+          q = { "<cmd>tabclose<cr>", "Tab close" },
         },
-      })
+        q = { "<cmd>q<cr><cmd>tabclose<cr>", "Close" },
+      }, { prefix = "<leader>", mode = { "n" } })
+    end,
+  },
+
+  {
+    "folke/trouble.nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    opts = {
+      mode = "lsp_document_diagnostics",
+      auto_open = false,
+      auto_close = true,
+      auto_jump = true,
+    },
+    config = function()
+      require("which-key").register({
+        d = {
+          name = "Diagnostics",
+          d = { "<cmd>TroubleToggle<cr>", "Toggle" },
+        },
+      }, { prefix = "<leader>", mode = { "n" } })
+    end,
+  },
+
+  {
+    "ThePrimeagen/refactoring.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    config = function()
+      require("refactoring").setup()
+      require("which-key").register({
+        r = {
+          name = "Refactoring",
+          f = { "<cmd>Refactor extract<cr>", "Extract function" },
+        },
+      }, { prefix = "<leader>", mode = { "v" } })
     end,
   },
 

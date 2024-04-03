@@ -37,6 +37,10 @@ vim.filetype.add({
   },
 })
 
+vim.cmd([[
+  let g:netrw_list_hide = netrw_gitignore#Hide()
+]])
+
 local in_wsl = os.getenv("WSL_DISTRO_NAME") ~= nil
 
 if in_wsl then
