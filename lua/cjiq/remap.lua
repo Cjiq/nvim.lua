@@ -13,7 +13,7 @@ vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 
 -- Do not paste over current reg when pasting in v-mode
-vim.keymap.set("x", "<leader>p", "\"_dP")
+vim.keymap.set("x", "<leader>p", '"_dP')
 
 vim.keymap.set("n", "J", "mzJ`z")
 
@@ -29,16 +29,14 @@ wk.register({
     f = { "<cmd>silent !tmux neww ~/.dotfiles/scripts/tmux-sessionizer<cr>", "Find project and start new tmux session" },
   },
   g = {
+    name = "Golang / Git",
     t = {
       name = "Telescope",
       s = { "<cmd>Telescope git_status<cr>", "Git status" },
     },
     s = { "<cmd>Git<cr>", "Git status" },
     c = { "<cmd>Git commit -v -q<cr>", "Git commit" },
-    d = { "<cmd>Git diff<cr>", "Git diff" },
     p = { "<cmd>Git push<cr>", "Git push" },
   },
-  w = {"<cmd>FormatWrite<cr>", "Format current buffer"},
-}, { prefix = "<leader>", mode = {"n"} })
-
-
+  w = { "<cmd>FormatWrite<cr>", "Format current buffer" },
+}, { prefix = "<leader>", mode = { "n" } })

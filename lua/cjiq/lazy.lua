@@ -69,13 +69,15 @@ require("lazy").setup({
     "sindrets/diffview.nvim",
     dependencies = {
       "folke/which-key.nvim",
+      "nvim-tree/nvim-web-devicons",
     },
     config = function()
       require("diffview").setup()
       local wk = require("which-key")
       wk.register({
         g = {
-          d = { "<cmd>DiffviewOpen<cr>", "Git diff" },
+          name = "Golang / Git",
+          d = { "<cmd>DiffviewOpen<cr>", "Git diffview" },
         },
       }, { prefix = "<leader>", mode = { "n" } })
     end,
@@ -448,6 +450,10 @@ require("lazy").setup({
           at = { "<cmd>GoAddTag<cr>", "Add tags to struct" },
           t = { "<cmd>GoTest<cr>", "Run tests" },
           r = { "<cmd>GoRun<cr>", "Run" },
+          m = {
+            name = "Mod",
+            t = { "<cmd>GoModTidy<cr>", "Go Mod Tidy" },
+          },
         },
       }, { prefix = "<leader>", mode = { "n" } })
     end,
@@ -748,10 +754,16 @@ require("lazy").setup({
     config = function()
       vim.o.timeout = true
       vim.o.timeoutlen = 800
-      require("which-key").setup({
+      local wk = require("which-key")
+      wk.setup({
         -- your configuration comes here
         -- or leave it empty to use the default settings
         -- refer to the configuration section below
+      })
+      wk.register({
+        t = {
+          d = { "<cmd>tabclose<cr>", "Tab close" },
+        },
       })
     end,
   },
