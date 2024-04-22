@@ -38,5 +38,12 @@ wk.register({
     c = { "<cmd>Git commit -v -q<cr>", "Git commit" },
     p = { "<cmd>Git push<cr>", "Git push" },
   },
+  n = {
+    name = "CSV",
+    a = { "<cmd>%ArrangeColumn<cr>", "Arrange CSV columns" },
+    r = { "<cmd>%UnArrangeColumn<cr>", "Unarrange CSV columns" },
+  },
   w = { "<cmd>FormatWrite<cr>", "Format current buffer" },
 }, { prefix = "<leader>", mode = { "n" } })
+
+vim.keymap.set("n", "<leader>ee", "oif err != nil {<CR>}<Esc>Oreturn err<Esc>")

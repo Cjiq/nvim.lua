@@ -1,3 +1,4 @@
+-- -*- coding: utf-8 -*-
 require("lazy").setup({
   { -- Bufferline
     "akinsho/bufferline.nvim",
@@ -62,6 +63,12 @@ require("lazy").setup({
       -- vim.g.copilot_no_tab_map = true
       -- vim.api.nvim_set_keymap("i", "<C-Space>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
     end,
+  },
+
+  -- CSV
+  {
+    "chrisbra/csv.vim",
+    dependencies = {},
   },
 
   -- Diffview
@@ -220,7 +227,16 @@ require("lazy").setup({
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
         clangd = {},
-        gopls = {},
+        gopls = {
+          hints = {
+            assignVariableTypes = true,
+            compositeLiteralFields = true,
+            compositeLiteralTypes = true,
+            functionTypeParameters = true,
+            parameterNames = true,
+            rangeVariableTypes = true,
+          },
+        },
         html = {},
         htmx = {},
         templ = {},
@@ -429,6 +445,7 @@ require("lazy").setup({
       "nvim-treesitter/nvim-treesitter",
       "folke/which-key.nvim",
     },
+    opts = {},
     config = function()
       local format_sync_grp = vim.api.nvim_create_augroup("GoFormat", {})
       vim.api.nvim_create_autocmd("BufWritePre", {
@@ -726,7 +743,7 @@ require("lazy").setup({
       -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
       -- - sd'   - [S]urround [D]elete [']quotes
       -- - sr)'  - [S]urround [R]eplace [)] [']
-      require("mini.surround").setup()
+      -- require("mini.surround").setup()
 
       -- Simple and easy statusline.
       --  You could remove this setup call if you don't like it,

@@ -39,6 +39,9 @@ vim.filetype.add({
 
 vim.cmd([[
   let g:netrw_list_hide = netrw_gitignore#Hide()
+  let b:csv_arrange_align = 'l*'
+  let g:csv_strict_columns = 1
+  let g:csv_autocmd_arrange = 0
 ]])
 
 local in_wsl = os.getenv("WSL_DISTRO_NAME") ~= nil
