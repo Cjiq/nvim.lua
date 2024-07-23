@@ -4,6 +4,7 @@ require("lazy").setup({
     version = "*",
     dependencies = "nvim-tree/nvim-web-devicons",
     config = function()
+      vim.diagnostic.config({ update_in_insert = true })
       local harpoon = require("harpoon")
       local load_bufferline = function()
         require("bufferline").setup({
@@ -14,7 +15,6 @@ require("lazy").setup({
             show_buffer_close_icons = true,
             show_close_icon = true,
             diagnostics = "nvim_lsp",
-            diagnostics_update_in_insert = true,
             -- The diagnostics indicator can be set to nil to keep the buffer name highlight but delete the highlighting
             diagnostics_indicator = function(count, level, diagnostics_dict, context)
               return "err(" .. count .. ")" .. " test"
@@ -74,12 +74,10 @@ require("lazy").setup({
     config = function()
       require("diffview").setup()
       local wk = require("which-key")
-      wk.register({
-        g = {
-          name = "Golang / Git",
-          d = { "<cmd>DiffviewOpen<cr>", "Git diffview" },
-        },
-      }, { prefix = "<leader>", mode = { "n" } })
+      wk.add({
+        { "<leader>g", group = "Golang / Git" },
+        { "<leader>gd", "<cmd>DiffviewOpen<cr>", desc = "Git diffview" },
+      })
     end,
   },
 
@@ -444,18 +442,14 @@ require("lazy").setup({
           capabilities = capabilities,
         },
       })
-      require("which-key").register({
-        g = {
-          name = "Golang / Git",
-          at = { "<cmd>GoAddTag<cr>", "Add tags to struct" },
-          t = { "<cmd>GoTest<cr>", "Run tests" },
-          r = { "<cmd>GoRun<cr>", "Run" },
-          m = {
-            name = "Mod",
-            t = { "<cmd>GoModTidy<cr>", "Go Mod Tidy" },
-          },
-        },
-      }, { prefix = "<leader>", mode = { "n" } })
+      require("which-key").add({
+        { "<leader>g", group = "Golang / Git" },
+        { "<leader>gat", "<cmd>GoAddTag<cr>", desc = "Add tags to struct" },
+        { "<leader>gm", group = "Mod" },
+        { "<leader>gmt", "<cmd>GoModTidy<cr>", desc = "Go Mod Tidy" },
+        { "<leader>gr", "<cmd>GoRun<cr>", desc = "Run" },
+        { "<leader>gt", "<cmd>GoTest<cr>", desc = "Run tests" },
+      })
     end,
     event = { "CmdlineEnter" },
     ft = { "go", "gomod" },
@@ -480,32 +474,37 @@ require("lazy").setup({
       vim.keymap.set("n", "<leader>b", mark.add_file)
       vim.keymap.set("n", "<C-e>", ui.toggle_quick_menu)
       local wk = require("which-key")
-      wk.register({
-        j = {
+      wk.add({
+        {
+          "<leader>j",
           function()
             require("harpoon.ui").nav_file(1)
           end,
-          "Harpoon file 1",
+          desc = "Harpoon file 1",
         },
-        k = {
+        {
+          "<leader>k",
           function()
             require("harpoon.ui").nav_file(2)
           end,
-          "Harpoon file 2",
+          desc = "Harpoon file 2",
         },
-        l = {
+        {
+          "<leader>l",
+
           function()
             require("harpoon.ui").nav_file(3)
           end,
-          "Harpoon file 3",
+          desc = "Harpoon file 3",
         },
-        ö = {
+        {
+          "<leader>ö",
           function()
             require("harpoon.ui").nav_file(4)
           end,
-          "Harpoon file 4",
+          desc = "Harpoon file 4",
         },
-      }, { prefix = "<leader>", mode = { "n" } })
+      })
     end,
   },
   { -- Lualine
@@ -639,17 +638,18 @@ require("lazy").setup({
       ensure_installed = {
         "bash",
         "c",
+        "diff",
         "html",
         "lua",
+        "luadoc",
         "markdown",
+        "markdown_inline",
+        "query",
         "vim",
         "vimdoc",
-        "yaml",
-        "query",
-        "javascript",
-        "go",
       },
       -- Autoinstall languages that are not installed
+      ignore_install = { "help" },
       auto_install = true,
       highlight = {
         enable = true,
@@ -663,6 +663,8 @@ require("lazy").setup({
     config = function(_, opts)
       -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
 
+      -- Prefer git instead of curl in order to improve connectivity in some environments
+      require("nvim-treesitter.install").prefer_git = true
       ---@diagnostic disable-next-line: missing-fields
       require("nvim-treesitter.configs").setup(opts)
 
@@ -760,12 +762,10 @@ require("lazy").setup({
         -- or leave it empty to use the default settings
         -- refer to the configuration section below
       })
-      wk.register({
-        t = {
-          q = { "<cmd>tabclose<cr>", "Tab close" },
-        },
-        q = { "<cmd>q<cr><cmd>tabclose<cr>", "Close" },
-      }, { prefix = "<leader>", mode = { "n" } })
+      wk.add({
+        { "<leader>q", "<cmd>q<cr><cmd>tabclose<cr>", desc = "Close" },
+        { "<leader>tq", "<cmd>tabclose<cr>", desc = "Tab close" },
+      })
     end,
   },
 
@@ -779,12 +779,10 @@ require("lazy").setup({
       auto_jump = true,
     },
     config = function()
-      require("which-key").register({
-        d = {
-          name = "Diagnostics",
-          d = { "<cmd>TroubleToggle<cr>", "Toggle" },
-        },
-      }, { prefix = "<leader>", mode = { "n" } })
+      require("which-key").add({
+        { "<leader>d", group = "Diagnostics" },
+        { "<leader>dd", "<cmd>TroubleToggle<cr>", desc = "Toggle" },
+      })
     end,
   },
 
@@ -795,14 +793,50 @@ require("lazy").setup({
       "nvim-treesitter/nvim-treesitter",
     },
     config = function()
-      require("refactoring").setup()
-      require("which-key").register({
-        r = {
-          name = "Refactoring",
-          f = { "<cmd>Refactor extract<cr>", "Extract function" },
-        },
-      }, { prefix = "<leader>", mode = { "v" } })
+      require("refactoring").setup({})
+      require("which-key").add({
+        { "<leader>r", group = "Refactoring", mode = "v" },
+        { "<leader>rf", "<cmd>Refactor extract<cr>", desc = "Extract function", mode = "v" },
+      })
     end,
+  },
+
+  {
+    "folke/trouble.nvim",
+    opts = {}, -- for default options, refer to the configuration section for custom setup.
+    cmd = "Trouble",
+    keys = {
+      {
+        "<leader>xx",
+        "<cmd>Trouble diagnostics toggle<cr>",
+        desc = "Diagnostics (Trouble)",
+      },
+      {
+        "<leader>xX",
+        "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
+        desc = "Buffer Diagnostics (Trouble)",
+      },
+      {
+        "<leader>cs",
+        "<cmd>Trouble symbols toggle focus=false<cr>",
+        desc = "Symbols (Trouble)",
+      },
+      {
+        "<leader>cl",
+        "<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
+        desc = "LSP Definitions / references / ... (Trouble)",
+      },
+      {
+        "<leader>xL",
+        "<cmd>Trouble loclist toggle<cr>",
+        desc = "Location List (Trouble)",
+      },
+      {
+        "<leader>xQ",
+        "<cmd>Trouble qflist toggle<cr>",
+        desc = "Quickfix List (Trouble)",
+      },
+    },
   },
 
   ---- Automatically set up your configuration after cloning packer.nvim

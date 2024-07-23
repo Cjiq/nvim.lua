@@ -18,25 +18,21 @@ vim.keymap.set("x", "<leader>p", '"_dP')
 vim.keymap.set("n", "J", "mzJ`z")
 
 local wk = require("which-key")
-wk.register({
-  r = {
-    name = "Reload",
-    cp = { "<cmd>so ~/.config/nvim/after/plugin/copilot.lua | Copilot enable<cr>", "Restart copilot" },
-    r = { "<cmd>so ~/.config/nvim/lua/cjiq/init.lua<cr>", "Reload nvim config" },
+wk.add({
+  { "<leader>f", group = "Find" },
+  {
+    "<leader>ff",
+    "<cmd>silent !tmux neww ~/.dotfiles/scripts/tmux-sessionizer<cr>",
+    desc = "Find project and start new tmux session",
   },
-  f = {
-    name = "Find",
-    f = { "<cmd>silent !tmux neww ~/.dotfiles/scripts/tmux-sessionizer<cr>", "Find project and start new tmux session" },
-  },
-  g = {
-    name = "Golang / Git",
-    t = {
-      name = "Telescope",
-      s = { "<cmd>Telescope git_status<cr>", "Git status" },
-    },
-    s = { "<cmd>Git<cr>", "Git status" },
-    c = { "<cmd>Git commit -v -q<cr>", "Git commit" },
-    p = { "<cmd>Git push<cr>", "Git push" },
-  },
-  w = { "<cmd>FormatWrite<cr>", "Format current buffer" },
-}, { prefix = "<leader>", mode = { "n" } })
+  { "<leader>g", group = "Golang / Git" },
+  { "<leader>gc", "<cmd>Git commit -v -q<cr>", desc = "Git commit" },
+  { "<leader>gp", "<cmd>Git push<cr>", desc = "Git push" },
+  { "<leader>gs", "<cmd>Git<cr>", desc = "Git status" },
+  { "<leader>gt", group = "Telescope" },
+  { "<leader>gts", "<cmd>Telescope git_status<cr>", desc = "Git status" },
+  { "<leader>r", group = "Reload" },
+  { "<leader>rcp", "<cmd>so ~/.config/nvim/after/plugin/copilot.lua | Copilot enable<cr>", desc = "Restart copilot" },
+  { "<leader>rr", "<cmd>so ~/.config/nvim/lua/cjiq/init.lua<cr>", desc = "Reload nvim config" },
+  { "<leader>w", "<cmd>FormatWrite<cr>", desc = "Format current buffer" },
+})
