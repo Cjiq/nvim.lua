@@ -295,6 +295,13 @@ require("lazy").setup({
       })
     end,
   },
+
+  {
+    "chrisgrieser/nvim-lsp-endhints",
+    event = "LspAttach",
+    opts = {}, -- required, even if empty
+  },
+
   { -- Autoformat
     "stevearc/conform.nvim",
     opts = {
