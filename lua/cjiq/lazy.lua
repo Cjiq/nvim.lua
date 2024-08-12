@@ -5,6 +5,7 @@ require("lazy").setup({
     version = "*",
     dependencies = "nvim-tree/nvim-web-devicons",
     config = function()
+      vim.diagnostic.config({ update_in_insert = true })
       local harpoon = require("harpoon")
       local load_bufferline = function()
         require("bufferline").setup({
@@ -15,7 +16,6 @@ require("lazy").setup({
             show_buffer_close_icons = true,
             show_close_icon = true,
             diagnostics = "nvim_lsp",
-            diagnostics_update_in_insert = true,
             -- The diagnostics indicator can be set to nil to keep the buffer name highlight but delete the highlighting
             diagnostics_indicator = function(count, level, diagnostics_dict, context)
               return "err(" .. count .. ")" .. " test"
@@ -81,12 +81,10 @@ require("lazy").setup({
     config = function()
       require("diffview").setup()
       local wk = require("which-key")
-      wk.register({
-        g = {
-          name = "Golang / Git",
-          d = { "<cmd>DiffviewOpen<cr>", "Git diffview" },
-        },
-      }, { prefix = "<leader>", mode = { "n" } })
+      wk.add({
+        { "<leader>g", group = "Golang / Git" },
+        { "<leader>gd", "<cmd>DiffviewOpen<cr>", desc = "Git diffview" },
+      })
     end,
   },
 
@@ -226,7 +224,11 @@ require("lazy").setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        clangd = {},
+        clangd = {
+          init_options = {
+            compilationDatabasePath = "./build",
+          },
+        },
         gopls = {
           hints = {
             assignVariableTypes = true,
@@ -461,18 +463,14 @@ require("lazy").setup({
           capabilities = capabilities,
         },
       })
-      require("which-key").register({
-        g = {
-          name = "Golang / Git",
-          at = { "<cmd>GoAddTag<cr>", "Add tags to struct" },
-          t = { "<cmd>GoTest<cr>", "Run tests" },
-          r = { "<cmd>GoRun<cr>", "Run" },
-          m = {
-            name = "Mod",
-            t = { "<cmd>GoModTidy<cr>", "Go Mod Tidy" },
-          },
-        },
-      }, { prefix = "<leader>", mode = { "n" } })
+      require("which-key").add({
+        { "<leader>g", group = "Golang / Git" },
+        { "<leader>gat", "<cmd>GoAddTag<cr>", desc = "Add tags to struct" },
+        { "<leader>gm", group = "Mod" },
+        { "<leader>gmt", "<cmd>GoModTidy<cr>", desc = "Go Mod Tidy" },
+        { "<leader>gr", "<cmd>GoRun<cr>", desc = "Run" },
+        { "<leader>gt", "<cmd>GoTest<cr>", desc = "Run tests" },
+      })
     end,
     event = { "CmdlineEnter" },
     ft = { "go", "gomod" },
@@ -486,6 +484,154 @@ require("lazy").setup({
       require("lsp_signature").setup(opts)
     end,
   },
+  {
+    "civitasv/cmake-tools.nvim",
+    config = function()
+      local osys = require("cmake-tools.osys")
+      require("cmake-tools").setup({
+        cmake_command = "cmake", -- this is used to specify cmake command path
+        ctest_command = "ctest", -- this is used to specify ctest command path
+        cmake_use_preset = true,
+        cmake_regenerate_on_save = true, -- auto generate when save CMakeLists.txt
+        cmake_generate_options = { "-DCMAKE_EXPORT_COMPILE_COMMANDS=1" }, -- this will be passed when invoke `CMakeGenerate`
+        cmake_build_options = {}, -- this will be passed when invoke `CMakeBuild`
+        -- support macro expansion:
+        --       ${kit}
+        --       ${kitGenerator}
+        --       ${variant:xx}
+        cmake_build_directory = function()
+          if osys.iswin32 then
+            return "build\\${variant:buildType}"
+          end
+          return "build/${variant:buildType}"
+        end, -- this is used to specify generate directory for cmake, allows macro expansion, can be a string or a function returning the string, relative to cwd.
+        cmake_soft_link_compile_commands = true, -- this will automatically make a soft link from compile commands file to project root dir
+        cmake_compile_commands_from_lsp = false, -- this will automatically set compile commands file location using lsp, to use it, please set `cmake_soft_link_compile_commands` to false
+        cmake_kits_path = nil, -- this is used to specify global cmake kits path, see CMakeKits for detailed usage
+        cmake_variants_message = {
+          short = { show = true }, -- whether to show short message
+          long = { show = true, max_length = 40 }, -- whether to show long message
+        },
+        cmake_dap_configuration = { -- debug settings for cmake
+          name = "cpp",
+          type = "codelldb",
+          request = "launch",
+          stopOnEntry = false,
+          runInTerminal = true,
+          console = "integratedTerminal",
+        },
+        cmake_executor = { -- executor to use
+          name = "quickfix", -- name of the executor
+          opts = {}, -- the options the executor will get, possible values depend on the executor type. See `default_opts` for possible values.
+          default_opts = { -- a list of default and possible values for executors
+            quickfix = {
+              show = "always", -- "always", "only_on_error"
+              position = "belowright", -- "vertical", "horizontal", "leftabove", "aboveleft", "rightbelow", "belowright", "topleft", "botright", use `:h vertical` for example to see help on them
+              size = 10,
+              encoding = "utf-8", -- if encoding is not "utf-8", it will be converted to "utf-8" using `vim.fn.iconv`
+              auto_close_when_success = true, -- typically, you can use it with the "always" option; it will auto-close the quickfix buffer if the execution is successful.
+            },
+            toggleterm = {
+              direction = "float", -- 'vertical' | 'horizontal' | 'tab' | 'float'
+              close_on_exit = false, -- whether close the terminal when exit
+              auto_scroll = true, -- whether auto scroll to the bottom
+              singleton = true, -- single instance, autocloses the opened one, if present
+            },
+            overseer = {
+              new_task_opts = {
+                strategy = {
+                  "toggleterm",
+                  direction = "horizontal",
+                  autos_croll = true,
+                  quit_on_exit = "success",
+                },
+              }, -- options to pass into the `overseer.new_task` command
+              on_new_task = function(task)
+                require("overseer").open({ enter = false, direction = "right" })
+              end, -- a function that gets overseer.Task when it is created, before calling `task:start`
+            },
+            terminal = {
+              name = "Main Terminal",
+              prefix_name = "[CMakeTools]: ", -- This must be included and must be unique, otherwise the terminals will not work. Do not use a simple spacebar " ", or any generic name
+              split_direction = "horizontal", -- "horizontal", "vertical"
+              split_size = 11,
+
+              -- Window handling
+              single_terminal_per_instance = true, -- Single viewport, multiple windows
+              single_terminal_per_tab = true, -- Single viewport per tab
+              keep_terminal_static_location = true, -- Static location of the viewport if avialable
+
+              -- Running Tasks
+              start_insert = false, -- If you want to enter terminal with :startinsert upon using :CMakeRun
+              focus = false, -- Focus on terminal when cmake task is launched.
+              do_not_add_newline = false, -- Do not hit enter on the command inserted when using :CMakeRun, allowing a chance to review or modify the command before hitting enter.
+            }, -- terminal executor uses the values in cmake_terminal
+          },
+        },
+        cmake_runner = { -- runner to use
+          name = "terminal", -- name of the runner
+          opts = {}, -- the options the runner will get, possible values depend on the runner type. See `default_opts` for possible values.
+          default_opts = { -- a list of default and possible values for runners
+            quickfix = {
+              show = "always", -- "always", "only_on_error"
+              position = "belowright", -- "bottom", "top"
+              size = 10,
+              encoding = "utf-8",
+              auto_close_when_success = true, -- typically, you can use it with the "always" option; it will auto-close the quickfix buffer if the execution is successful.
+            },
+            toggleterm = {
+              direction = "float", -- 'vertical' | 'horizontal' | 'tab' | 'float'
+              close_on_exit = false, -- whether close the terminal when exit
+              auto_scroll = true, -- whether auto scroll to the bottom
+              singleton = true, -- single instance, autocloses the opened one, if present
+            },
+            overseer = {
+              new_task_opts = {
+                strategy = {
+                  "toggleterm",
+                  direction = "horizontal",
+                  autos_croll = true,
+                  quit_on_exit = "success",
+                },
+              }, -- options to pass into the `overseer.new_task` command
+              on_new_task = function(task) end, -- a function that gets overseer.Task when it is created, before calling `task:start`
+            },
+            terminal = {
+              name = "Main Terminal",
+              prefix_name = "[CMakeTools]: ", -- This must be included and must be unique, otherwise the terminals will not work. Do not use a simple spacebar " ", or any generic name
+              split_direction = "horizontal", -- "horizontal", "vertical"
+              split_size = 11,
+
+              -- Window handling
+              single_terminal_per_instance = true, -- Single viewport, multiple windows
+              single_terminal_per_tab = true, -- Single viewport per tab
+              keep_terminal_static_location = true, -- Static location of the viewport if avialable
+
+              -- Running Tasks
+              start_insert = false, -- If you want to enter terminal with :startinsert upon using :CMakeRun
+              focus = false, -- Focus on terminal when cmake task is launched.
+              do_not_add_newline = false, -- Do not hit enter on the command inserted when using :CMakeRun, allowing a chance to review or modify the command before hitting enter.
+            },
+          },
+        },
+        cmake_notifications = {
+          runner = { enabled = true },
+          executor = { enabled = true },
+          spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }, -- icons used for progress display
+          refresh_rate_ms = 100, -- how often to iterate icons
+        },
+        cmake_virtual_text_support = true, -- Show the target related to current file using virtual text (at right corner)
+      })
+      local wk = require("which-key")
+      wk.add({
+        {
+          "<leader>cb",
+          "<cmd>CMakeBuild<cr><cmd>CMakeRunTest all<cr>",
+          desc = "Build and Test",
+        },
+      })
+    end,
+  },
   { -- Harpoooooonnnnnn!!!!!!!
     "theprimeagen/harpoon",
     dependencies = {
@@ -494,35 +640,51 @@ require("lazy").setup({
     config = function()
       local mark = require("harpoon.mark")
       local ui = require("harpoon.ui")
-      vim.keymap.set("n", "<leader>b", mark.add_file)
+      -- vim.keymap.set("n", "<leader>b", mark.add_file)
       vim.keymap.set("n", "<C-e>", ui.toggle_quick_menu)
       local wk = require("which-key")
-      wk.register({
-        j = {
+      wk.add({
+        {
+          "<leader>b",
+          mark.add_file,
+          desc = "Add current file to Harpoon",
+        },
+        {
+          "<leader>e",
+          ui.toggle_quick_menu,
+          desc = "Open Harpoon Menu",
+        },
+
+        {
+          "<leader>j",
           function()
             require("harpoon.ui").nav_file(1)
           end,
-          "Harpoon file 1",
+          desc = "Harpoon file 1",
         },
-        k = {
+        {
+          "<leader>k",
           function()
             require("harpoon.ui").nav_file(2)
           end,
-          "Harpoon file 2",
+          desc = "Harpoon file 2",
         },
-        l = {
+        {
+          "<leader>l",
+
           function()
             require("harpoon.ui").nav_file(3)
           end,
-          "Harpoon file 3",
+          desc = "Harpoon file 3",
         },
-        ö = {
+        {
+          "<leader>ö",
           function()
             require("harpoon.ui").nav_file(4)
           end,
-          "Harpoon file 4",
+          desc = "Harpoon file 4",
         },
-      }, { prefix = "<leader>", mode = { "n" } })
+      })
     end,
   },
   { -- Lualine
@@ -656,17 +818,18 @@ require("lazy").setup({
       ensure_installed = {
         "bash",
         "c",
+        "diff",
         "html",
         "lua",
+        "luadoc",
         "markdown",
+        "markdown_inline",
+        "query",
         "vim",
         "vimdoc",
-        "yaml",
-        "query",
-        "javascript",
-        "go",
       },
       -- Autoinstall languages that are not installed
+      ignore_install = { "help" },
       auto_install = true,
       highlight = {
         enable = true,
@@ -680,6 +843,8 @@ require("lazy").setup({
     config = function(_, opts)
       -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
 
+      -- Prefer git instead of curl in order to improve connectivity in some environments
+      require("nvim-treesitter.install").prefer_git = true
       ---@diagnostic disable-next-line: missing-fields
       require("nvim-treesitter.configs").setup(opts)
 
@@ -719,49 +884,11 @@ require("lazy").setup({
   },
 
   "tpope/vim-fugitive",
-  -- 'tpope/vim-surround',
+  "tpope/vim-surround",
   { -- undotree
     "mbbill/undotree",
     config = function()
       vim.keymap.set("n", "<leader>u", ":UndotreeToggle<cr>")
-    end,
-  },
-
-  { -- Collection of various small independent plugins/modules
-    "echasnovski/mini.nvim",
-    config = function()
-      -- Better Around/Inside textobjects
-      --
-      -- Examples:
-      --  - va)  - [V]isually select [A]round [)]paren
-      --  - yinq - [Y]ank [I]nside [N]ext [']quote
-      --  - ci'  - [C]hange [I]nside [']quote
-      require("mini.ai").setup({ n_lines = 500 })
-
-      -- Add/delete/replace surroundings (brackets, quotes, etc.)
-      --
-      -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
-      -- - sd'   - [S]urround [D]elete [']quotes
-      -- - sr)'  - [S]urround [R]eplace [)] [']
-      -- require("mini.surround").setup()
-
-      -- Simple and easy statusline.
-      --  You could remove this setup call if you don't like it,
-      --  and try some other statusline plugin
-      local statusline = require("mini.statusline")
-      -- set use_icons to true if you have a Nerd Font
-      statusline.setup({ use_icons = vim.g.have_nerd_font })
-
-      -- You can configure sections in the statusline by overriding their
-      -- default behavior. For example, here we set the section for
-      -- cursor location to LINE:COLUMN
-      ---@diagnostic disable-next-line: duplicate-set-field
-      statusline.section_location = function()
-        return "%2l:%-2v"
-      end
-
-      -- ... and there is more!
-      --  Check out: https://github.com/echasnovski/mini.nvim
     end,
   },
 
@@ -777,12 +904,29 @@ require("lazy").setup({
         -- or leave it empty to use the default settings
         -- refer to the configuration section below
       })
-      wk.register({
-        t = {
-          q = { "<cmd>tabclose<cr>", "Tab close" },
+      wk.add({
+        { "<leader>q", "<cmd>q<cr><cmd>tabclose<cr>", desc = "Close" },
+        { "<leader>tq", "<cmd>tabclose<cr>", desc = "Tab close" },
+        { "<leader>f", group = "Find" },
+        {
+          "<leader>ff",
+          "<cmd>silent !tmux neww ~/.dotfiles/scripts/tmux-sessionizer<cr>",
+          desc = "Find project and start new tmux session",
         },
-        q = { "<cmd>q<cr><cmd>tabclose<cr>", "Close" },
-      }, { prefix = "<leader>", mode = { "n" } })
+        { "<leader>gc", "<cmd>Git commit -v -q<cr>", desc = "Git commit" },
+        { "<leader>gp", "<cmd>Git push<cr>", desc = "Git push" },
+        { "<leader>gs", "<cmd>Git<cr>", desc = "Git status" },
+        { "<leader>gt", group = "Telescope" },
+        { "<leader>gts", "<cmd>Telescope git_status<cr>", desc = "Git status" },
+        { "<leader>r", group = "Reload" },
+        {
+          "<leader>rcp",
+          "<cmd>so ~/.config/nvim/after/plugin/copilot.lua | Copilot enable<cr>",
+          desc = "Restart copilot",
+        },
+        { "<leader>rr", "<cmd>so ~/.config/nvim/lua/cjiq/init.lua<cr>", desc = "Reload nvim config" },
+        { "<leader>w", "<cmd>FormatWrite<cr>", desc = "Format current buffer" },
+      })
     end,
   },
 
@@ -796,12 +940,10 @@ require("lazy").setup({
       auto_jump = true,
     },
     config = function()
-      require("which-key").register({
-        d = {
-          name = "Diagnostics",
-          d = { "<cmd>TroubleToggle<cr>", "Toggle" },
-        },
-      }, { prefix = "<leader>", mode = { "n" } })
+      require("which-key").add({
+        { "<leader>d", group = "Diagnostics" },
+        { "<leader>dd", "<cmd>TroubleToggle<cr>", desc = "Toggle" },
+      })
     end,
   },
 
@@ -812,14 +954,50 @@ require("lazy").setup({
       "nvim-treesitter/nvim-treesitter",
     },
     config = function()
-      require("refactoring").setup()
-      require("which-key").register({
-        r = {
-          name = "Refactoring",
-          f = { "<cmd>Refactor extract<cr>", "Extract function" },
-        },
-      }, { prefix = "<leader>", mode = { "v" } })
+      require("refactoring").setup({})
+      require("which-key").add({
+        { "<leader>r", group = "Refactoring", mode = "v" },
+        { "<leader>rf", "<cmd>Refactor extract<cr>", desc = "Extract function", mode = "v" },
+      })
     end,
+  },
+
+  {
+    "folke/trouble.nvim",
+    opts = {}, -- for default options, refer to the configuration section for custom setup.
+    cmd = "Trouble",
+    keys = {
+      {
+        "<leader>xx",
+        "<cmd>Trouble diagnostics toggle<cr>",
+        desc = "Diagnostics (Trouble)",
+      },
+      {
+        "<leader>xX",
+        "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
+        desc = "Buffer Diagnostics (Trouble)",
+      },
+      {
+        "<leader>cs",
+        "<cmd>Trouble symbols toggle focus=false<cr>",
+        desc = "Symbols (Trouble)",
+      },
+      {
+        "<leader>cl",
+        "<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
+        desc = "LSP Definitions / references / ... (Trouble)",
+      },
+      {
+        "<leader>xL",
+        "<cmd>Trouble loclist toggle<cr>",
+        desc = "Location List (Trouble)",
+      },
+      {
+        "<leader>xQ",
+        "<cmd>Trouble qflist toggle<cr>",
+        desc = "Quickfix List (Trouble)",
+      },
+    },
   },
 
   ---- Automatically set up your configuration after cloning packer.nvim
