@@ -103,6 +103,7 @@ require("lazy").setup({
       -- `neodev` configures Lua LSP for your Neovim config, runtime and plugins
       -- used for completion, annotations and signatures of Neovim apis
       { "folke/neodev.nvim", opts = {} },
+      "folke/which-key.nvim",
     },
     config = function()
       -- Brief aside: **What is LSP?**
@@ -774,16 +775,23 @@ require("lazy").setup({
 
       -- See `:help telescope.builtin`
       local builtin = require("telescope.builtin")
-      vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "[S]earch [H]elp" })
-      vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "[S]earch [K]eymaps" })
-      vim.keymap.set("n", "<leader>sf", builtin.find_files, { desc = "[S]earch [F]iles" })
-      vim.keymap.set("n", "<leader>ss", builtin.builtin, { desc = "[S]earch [S]elect Telescope" })
-      vim.keymap.set("n", "<leader>sw", builtin.grep_string, { desc = "[S]earch current [W]ord" })
-      vim.keymap.set("n", "<leader>sg", builtin.live_grep, { desc = "[S]earch by [G]rep" })
-      vim.keymap.set("n", "<leader>sd", builtin.diagnostics, { desc = "[S]earch [D]iagnostics" })
-      vim.keymap.set("n", "<leader>sr", builtin.resume, { desc = "[S]earch [R]esume" })
-      vim.keymap.set("n", "<leader>s.", builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
-      vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "[ ] Find existing buffers" })
+      local wk = require("which-key")
+      if wk ~= nil then
+        wk.add({
+          mode = { "n" },
+          { "<leader>sh", builtin.help_tags, desc = "[S]earch [H]elp" },
+          { "<leader>sk", builtin.keymaps, desc = "[S]earch [K]eymaps" },
+          { "<leader>sf", builtin.find_files, desc = "[S]earch [F]iles" },
+          { "<leader>ss", builtin.builtin, desc = "[S]earch [S]elect Telescope" },
+          { "<leader>sw", builtin.grep_string, desc = "[S]earch current [W]ord" },
+          { "<leader>sg", builtin.live_grep, desc = "[S]earch by [G]rep" },
+          { "<leader>sd", builtin.diagnostics, desc = "[S]earch [D]iagnostics" },
+          { "<leader>sr", builtin.resume, desc = "[S]earch [R]esume" },
+          { "<leader>s.", builtin.oldfiles, desc = '[S]earch Recent Files ("." for repeat)' },
+          { "<leader><leader>", builtin.buffers, desc = "[ ] Find existing buffers" },
+        })
+      end
+
       vim.keymap.set("n", "<C-p>", builtin.find_files, {})
 
       -- Slightly advanced example of overriding default behavior and theme
@@ -904,29 +912,31 @@ require("lazy").setup({
         -- or leave it empty to use the default settings
         -- refer to the configuration section below
       })
-      wk.add({
-        { "<leader>q", "<cmd>q<cr><cmd>tabclose<cr>", desc = "Close" },
-        { "<leader>tq", "<cmd>tabclose<cr>", desc = "Tab close" },
-        { "<leader>f", group = "Find" },
-        {
-          "<leader>ff",
-          "<cmd>silent !tmux neww ~/.dotfiles/scripts/tmux-sessionizer<cr>",
-          desc = "Find project and start new tmux session",
-        },
-        { "<leader>gc", "<cmd>Git commit -v -q<cr>", desc = "Git commit" },
-        { "<leader>gp", "<cmd>Git push<cr>", desc = "Git push" },
-        { "<leader>gs", "<cmd>Git<cr>", desc = "Git status" },
-        { "<leader>gt", group = "Telescope" },
-        { "<leader>gts", "<cmd>Telescope git_status<cr>", desc = "Git status" },
-        { "<leader>r", group = "Reload" },
-        {
-          "<leader>rcp",
-          "<cmd>so ~/.config/nvim/after/plugin/copilot.lua | Copilot enable<cr>",
-          desc = "Restart copilot",
-        },
-        { "<leader>rr", "<cmd>so ~/.config/nvim/lua/cjiq/init.lua<cr>", desc = "Reload nvim config" },
-        { "<leader>w", "<cmd>FormatWrite<cr>", desc = "Format current buffer" },
-      })
+      if wk ~= nil then
+        wk.add({
+          { "<leader>q", "<cmd>q<cr><cmd>tabclose<cr>", desc = "Close" },
+          { "<leader>tq", "<cmd>tabclose<cr>", desc = "Tab close" },
+          { "<leader>f", group = "Find" },
+          {
+            "<leader>ff",
+            "<cmd>silent !tmux neww ~/.dotfiles/scripts/tmux-sessionizer<cr>",
+            desc = "Find project and start new tmux session",
+          },
+          { "<leader>gc", "<cmd>Git commit -v -q<cr>", desc = "Git commit" },
+          { "<leader>gp", "<cmd>Git push<cr>", desc = "Git push" },
+          { "<leader>gs", "<cmd>Git<cr>", desc = "Git status" },
+          { "<leader>gt", group = "Telescope" },
+          { "<leader>gts", "<cmd>Telescope git_status<cr>", desc = "Git status" },
+          { "<leader>r", group = "Reload" },
+          {
+            "<leader>rcp",
+            "<cmd>so ~/.config/nvim/after/plugin/copilot.lua | Copilot enable<cr>",
+            desc = "Restart copilot",
+          },
+          { "<leader>rr", "<cmd>so ~/.config/nvim/lua/cjiq/init.lua<cr>", desc = "Reload nvim config" },
+          { "<leader>w", "<cmd>FormatWrite<cr>", desc = "Format current buffer" },
+        })
+      end
     end,
   },
 
