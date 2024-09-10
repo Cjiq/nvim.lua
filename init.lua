@@ -100,3 +100,13 @@ vim.api.nvim_create_autocmd("BufEnter", {
   callback = custom_bufferline,
   group = buf_enter_grp,
 })
+
+-- Define an autocmd group to avoid duplication
+vim.api.nvim_create_augroup("CsvFileSettings", { clear = true })
+
+-- Create an autocmd within the group
+vim.api.nvim_create_autocmd("FileType", {
+  group = "CsvFileSettings",
+  pattern = "csv",
+  command = "setlocal cursorline",
+})

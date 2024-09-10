@@ -69,6 +69,13 @@ require("lazy").setup({
   {
     "chrisbra/csv.vim",
     dependencies = {},
+    config = function()
+      local wk = require("which-key")
+      wk.add({
+        { "<leader>na", "<cmd>%ArrangeColumn<cr>", desc = "Arrange CSV columns" },
+        { "<leader>nr", "<cmd>%UnArrangeColumn<cr>", desc = "UnArrange CSV columns" },
+      })
+    end,
   },
 
   -- Diffview
@@ -852,6 +859,7 @@ require("lazy").setup({
         --  If you are experiencing weird indenting issues, add the language to
         --  the list of additional_vim_regex_highlighting and disabled languages for indent.
         additional_vim_regex_highlighting = { "ruby" },
+        disable = { "csv" },
       },
       indent = { enable = true, disable = { "ruby" } },
     },
