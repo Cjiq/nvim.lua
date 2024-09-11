@@ -57,13 +57,13 @@ require("lazy").setup({
       require("nvim_comment").setup()
     end,
   },
-  { -- Copilot
-    "github/copilot.vim",
-    config = function()
-      -- vim.g.copilot_no_tab_map = true
-      -- vim.api.nvim_set_keymap("i", "<C-Space>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
-    end,
-  },
+  -- { -- Copilot
+  --   "github/copilot.vim",
+  --   config = function()
+  --     -- vim.g.copilot_no_tab_map = true
+  --     -- vim.api.nvim_set_keymap("i", "<C-Space>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
+  --   end,
+  -- },
 
   -- CSV
   {
@@ -227,7 +227,7 @@ require("lazy").setup({
       local servers = {
         clangd = {
           init_options = {
-            compilationDatabasePath = "./build",
+            compilationDatabasePath = "./",
           },
         },
         gopls = {
