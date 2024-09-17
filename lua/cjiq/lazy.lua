@@ -908,6 +908,7 @@ require("lazy").setup({
 
   "tpope/vim-fugitive",
   "tpope/vim-surround",
+  "tpope/vim-repeat",
   { -- undotree
     "mbbill/undotree",
     config = function()
