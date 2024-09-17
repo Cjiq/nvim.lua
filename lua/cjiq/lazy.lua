@@ -254,7 +254,7 @@ require("lazy").setup({
         tailwindcss = {},
         vimls = {},
         cssls = {},
-        tsserver = {},
+        ts_ls = {},
         pyright = {},
         lua_ls = {
           -- cmd = {...},
