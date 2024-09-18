@@ -68,7 +68,9 @@ require("lazy").setup({
   -- CSV
   {
     "chrisbra/csv.vim",
-    dependencies = {},
+    dependencies = {
+      "folke/which-key.nvim",
+    },
     config = function()
       local wk = require("which-key")
       wk.add({
@@ -501,6 +503,9 @@ require("lazy").setup({
   },
   {
     "civitasv/cmake-tools.nvim",
+    dependencies = {
+      "folke/which-key.nvim",
+    },
     config = function()
       local osys = require("cmake-tools.osys")
       require("cmake-tools").setup({
@@ -736,6 +741,7 @@ require("lazy").setup({
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
       { "nvim-tree/nvim-web-devicons", enabled = vim.g.have_nerd_font },
+      "folke/which-key.nvim",
     },
     config = function()
       -- Telescope is a fuzzy finder that comes with a lot of different things that
@@ -918,6 +924,7 @@ require("lazy").setup({
   -- Lua
   {
     "folke/which-key.nvim",
+    event = "VimEnter",
     config = function()
       vim.o.timeout = true
       vim.o.timeoutlen = 800
@@ -932,6 +939,8 @@ require("lazy").setup({
           { "<leader>q", "<cmd>q<cr><cmd>tabclose<cr>", desc = "Close" },
           { "<leader>tq", "<cmd>tabclose<cr>", desc = "Tab close" },
           { "<leader>f", group = "Find" },
+          { "<leader>i", "<C-a>", desc = "Increment" },
+          { "<leader>d", "<C-x>", desc = "Decrement" },
           {
             "<leader>ff",
             "<cmd>silent !tmux neww ~/.dotfiles/scripts/tmux-sessionizer<cr>",
@@ -957,7 +966,10 @@ require("lazy").setup({
 
   {
     "folke/trouble.nvim",
-    dependencies = { "nvim-tree/nvim-web-devicons" },
+    dependencies = {
+      "nvim-tree/nvim-web-devicons",
+      "folke/which-key.nvim",
+    },
     opts = {
       mode = "lsp_document_diagnostics",
       auto_open = false,
@@ -977,6 +989,7 @@ require("lazy").setup({
     dependencies = {
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",
+      "folke/which-key.nvim",
     },
     config = function()
       require("refactoring").setup({})
