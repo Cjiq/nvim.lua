@@ -105,8 +105,19 @@ vim.api.nvim_create_autocmd("BufEnter", {
 vim.api.nvim_create_augroup("CsvFileSettings", { clear = true })
 
 -- Create an autocmd within the group
-vim.api.nvim_create_autocmd("FileType", {
+vim.api.nvim_create_autocmd("BufEnter", {
   group = "CsvFileSettings",
-  pattern = "csv",
-  command = "setlocal cursorline",
+  pattern = "*.csv",
+  callback = function()
+    -- Set local options for CSV files
+    vim.cmd("setlocal cursorline")
+
+    -- Remove csv.vim plugin's <Space> mapping in normal mode
+    vim.defer_fn(function()
+      pcall(vim.api.nvim_buf_del_keymap, 0, "n", "<Space>")
+
+      -- Reapply <Space> as the leader key in the current buffer
+      vim.api.nvim_set_keymap("", "<Space>", "<Leader>", { noremap = true, silent = true })
+    end, 500)
+  end,
 })
