@@ -91,8 +91,8 @@ require("lazy").setup({
       require("diffview").setup()
       local wk = require("which-key")
       wk.add({
-        { "<leader>g", group = "Golang / Git" },
-        { "<leader>gd", "<cmd>DiffviewOpen<cr>", desc = "Git diffview" },
+        { "<leader>gi", group = "Golang / Git" },
+        { "<leader>gid", "<cmd>DiffviewOpen<cr>", desc = "Git diffview" },
       })
     end,
   },
@@ -256,7 +256,7 @@ require("lazy").setup({
         tailwindcss = {},
         vimls = {},
         cssls = {},
-        tsserver = {},
+        ts_ls = {},
         pyright = {},
         lua_ls = {
           -- cmd = {...},
@@ -955,9 +955,9 @@ require("lazy").setup({
             "<cmd>silent !tmux neww ~/.dotfiles/scripts/tmux-sessionizer<cr>",
             desc = "Find project and start new tmux session",
           },
-          { "<leader>gc", "<cmd>Git commit -v -q<cr>", desc = "Git commit" },
-          { "<leader>gp", "<cmd>Git push<cr>", desc = "Git push" },
-          { "<leader>gs", "<cmd>Git<cr>", desc = "Git status" },
+          { "<leader>gic", "<cmd>Git commit -v -q<cr>", desc = "Git commit" },
+          { "<leader>gip", "<cmd>Git push<cr>", desc = "Git push" },
+          { "<leader>gis", "<cmd>Git<cr>", desc = "Git status" },
           { "<leader>gt", group = "Telescope" },
           { "<leader>gts", "<cmd>Telescope git_status<cr>", desc = "Git status" },
           { "<leader>r", group = "Reload" },
