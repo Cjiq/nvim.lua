@@ -1,12 +1,15 @@
 vim.g.mapleader = " "
 
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
-vim.keymap.set("n", "<leader>pss", vim.cmd.PackerSync)
+vim.keymap.set("n", "<leader>pss", ":Lazy<CR>")
 vim.keymap.set("n", "<leader>.", vim.cmd.vsp)
 vim.keymap.set("n", "<leader>-", vim.cmd.hsp)
 vim.keymap.set("n", "<leader>x", vim.cmd.hsp)
 vim.keymap.set("n", "<C-i>", vim.cmd.bprev)
 vim.keymap.set("n", "<C-o>", vim.cmd.bnext)
+
+vim.keymap.set("n", "<C-d>", "<C-d>zz")
+vim.keymap.set("n", "<C-u>", "<C-u>zz")
 
 vim.keymap.set("n", "<leader>wj", ":resize -5<cr>")
 vim.keymap.set("n", "<leader>wk", ":resize +5<cr>")

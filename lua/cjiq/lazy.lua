@@ -293,10 +293,10 @@ require("lazy").setup({
       require("mason-lspconfig").setup({
         handlers = {
           function(server_name)
+            -- if server_name == "tsserver" then
+            --   server_name = "ts_ls"
+            -- end
             local server = servers[server_name] or {}
-            if server == "tsserver" then
-              server = "ts_ls"
-            end
             -- This handles overriding only values explicitly passed
             -- by the server configuration above. Useful when disabling
             -- certain features of an LSP (for example, turning off formatting for tsserver)
@@ -490,6 +490,7 @@ require("lazy").setup({
         { "<leader>gmt", "<cmd>GoModTidy<cr>", desc = "Go Mod Tidy" },
         { "<leader>gr", "<cmd>GoRun<cr>", desc = "Run" },
         { "<leader>gt", "<cmd>GoTest<cr>", desc = "Run tests" },
+        { "<leader>cr", "<cmd>GoRename<cr>", desc = "Go Rename" },
       })
     end,
     event = { "CmdlineEnter" },
@@ -991,6 +992,13 @@ require("lazy").setup({
         { "<leader>dd", "<cmd>TroubleToggle<cr>", desc = "Toggle" },
       })
     end,
+  },
+
+  {
+    "ralismark/opsort.vim",
+    dependencies = {
+      "tpope/vim-repeat",
+    },
   },
 
   {
