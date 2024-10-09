@@ -995,6 +995,13 @@ require("lazy").setup({
   },
 
   {
+    "ralismark/opsort.vim",
+    dependencies = {
+      "tpope/vim-repeat",
+    },
+  },
+
+  {
     "ThePrimeagen/refactoring.nvim",
     dependencies = {
       "nvim-lua/plenary.nvim",
