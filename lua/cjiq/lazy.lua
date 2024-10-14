@@ -77,6 +77,10 @@ require("lazy").setup({
         { "<leader>na", "<cmd>%ArrangeColumn<cr>", desc = "Arrange CSV columns" },
         { "<leader>nr", "<cmd>%UnArrangeColumn<cr>", desc = "UnArrange CSV columns" },
       })
+      vim.cmd([[
+        let b:csv_arrange_align = 'l*'
+        let g:csv_strict_columns = 1
+      ]])
     end,
   },
 
@@ -483,6 +487,7 @@ require("lazy").setup({
           capabilities = capabilities,
         },
       })
+      vim.keymap.set("n", "<leader>ee", "oif err != nil {<CR>}<Esc>Oreturn err<Esc>")
       require("which-key").add({
         { "<leader>g", group = "Golang / Git" },
         { "<leader>gat", "<cmd>GoAddTag<cr>", desc = "Add tags to struct" },
@@ -712,6 +717,13 @@ require("lazy").setup({
             require("harpoon.ui").nav_file(4)
           end,
           desc = "Harpoon file 4",
+        },
+        {
+          "<leader>ä",
+          function()
+            require("harpoon.ui").nav_file(5)
+          end,
+          desc = "Harpoon file 5",
         },
       })
     end,
