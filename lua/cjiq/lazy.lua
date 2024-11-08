@@ -237,7 +237,9 @@ require("lazy").setup({
         clangd = {
           init_options = {
             compilationDatabasePath = "./",
+            clangdFileStatus = true,
           },
+          filetypes = { "c", "cpp", "objc", "objcpp" },
         },
         gopls = {
           hints = {
@@ -257,6 +259,9 @@ require("lazy").setup({
         vimls = {},
         cssls = {},
         ts_ls = {},
+        buf = {
+          filetypes = { "proto" },
+        },
         pyright = {},
         lua_ls = {
           -- cmd = {...},
@@ -284,7 +289,9 @@ require("lazy").setup({
 
       -- You can add other tools here that you want Mason to install
       -- for you, so that they are available from within Neovim.
+      -- local ensure_installed = vim.tbl_keys(servers or {})
       local ensure_installed = vim.tbl_keys(servers or {})
+
       vim.list_extend(ensure_installed, {
         "stylua", -- Used to format Lua code
       })
@@ -296,7 +303,20 @@ require("lazy").setup({
             -- if server_name == "tsserver" then
             --   server_name = "ts_ls"
             -- end
+            local current_dir = vim.fn.getcwd()
+
             local server = servers[server_name] or {}
+            if server_name == "clangd" and string.find(current_dir, "esp32") then
+              server.cmd = {
+                "/home/cjiq/.espressif/tools/esp-clang/esp-18.1.2_20240912/esp-clang/bin/clangd",
+                "--background-index",
+                "--query-driver=/home/cjiq/.espressif/tools/xtensa-esp-elf/esp-14.2.0_20240906/xtensa-esp-elf/bin/xtensa-esp32s3-elf-g*",
+              }
+              -- server.flags = {
+              --   "--header-insertion=never",
+              -- }
+              -- server.root_dir = vim.loop.cwd
+            end
             -- This handles overriding only values explicitly passed
             -- by the server configuration above. Useful when disabling
             -- certain features of an LSP (for example, turning off formatting for tsserver)
