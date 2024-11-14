@@ -80,26 +80,26 @@ vim.api.nvim_create_autocmd(
   { "BufWritePre" },
   { pattern = { "*.templ" }, callback = custom_format, group = format_sync_grp }
 )
-local custom_bufferline = function(buf)
-  for _, winid in pairs(vim.api.nvim_tabpage_list_wins(0)) do
-    if vim.api.nvim_win_get_config(winid).zindex then
-      return
-    end
-  end
-  local custom_load_tabs = function()
-    vim.wo.winbar = _G.nvim_bufferline()
-    vim.cmd("set showtabline=0")
-  end
-  vim.defer_fn(custom_load_tabs, 120)
-  -- vim.cmd(":LspRestart")
-end
-vim.api.nvim_create_autocmd({ "BufEnter" }, { callback = custom_bufferline })
-
-local buf_enter_grp = vim.api.nvim_create_augroup("BufEnterGroup", {})
-vim.api.nvim_create_autocmd("BufEnter", {
-  callback = custom_bufferline,
-  group = buf_enter_grp,
-})
+-- local custom_bufferline = function(buf)
+--   for _, winid in pairs(vim.api.nvim_tabpage_list_wins(0)) do
+--     if vim.api.nvim_win_get_config(winid).zindex then
+--       return
+--     end
+--   end
+--   local custom_load_tabs = function()
+--     vim.wo.winbar = _G.nvim_bufferline()
+--     vim.cmd("set showtabline=0")
+--   end
+--   vim.defer_fn(custom_load_tabs, 120)
+--   -- vim.cmd(":LspRestart")
+-- end
+-- vim.api.nvim_create_autocmd({ "BufEnter" }, { callback = custom_bufferline })
+--
+-- local buf_enter_grp = vim.api.nvim_create_augroup("BufEnterGroup", {})
+-- vim.api.nvim_create_autocmd("BufEnter", {
+--   callback = custom_bufferline,
+--   group = buf_enter_grp,
+-- })
 
 -- Define an autocmd group to avoid duplication
 vim.api.nvim_create_augroup("CsvFileSettings", { clear = true })
