@@ -37,6 +37,10 @@ return {
           },
           { "<leader>rr", "<cmd>so ~/.config/nvim/lua/cjiq/init.lua<cr>", desc = "Reload nvim config" },
           { "<leader>w", "<cmd>FormatWrite<cr>", desc = "Format current buffer" },
+          { "<leader>p", group = "Project" },
+          { "<leader>pv", vim.cmd.Ex, desc = "Open netrw" },
+          { "<leader>pss", "<cmd>Lazy<cr>", desc = "Open Lazy" },
+          { "<leader>po", "<cmd>Neotree<cr>", desc = "Open Treeview" },
         })
       end
     end,
