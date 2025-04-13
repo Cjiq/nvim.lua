@@ -199,6 +199,8 @@ return {
       })
       require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
+      local lspconfig = require("lspconfig")
+
       require("mason-lspconfig").setup({
         handlers = {
           function(server_name)
@@ -212,7 +214,7 @@ return {
               server.cmd = {
                 "/home/cjiq/.espressif/tools/esp-clang/esp-18.1.2_20240912/esp-clang/bin/clangd",
                 "--background-index",
-                "--query-driver=/home/cjiq/.espressif/tools/xtensa-esp-elf/esp-14.2.0_20240906/xtensa-esp-elf/bin/xtensa-esp32s3-elf-g*",
+                "--query-driver=**",
               }
               -- server.flags = {
               --   "--header-insertion=never",
